@@ -5,6 +5,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <style>
             #pagination a {
                 display:inline-block;
@@ -15,6 +16,17 @@
         </style>
     </head>
     <body>
+        <div class="row">
+            <div class="col-sm-9">
+
+            </div>
+            <div class="col-sm-3">
+                <button type="button" class="btn btn-primary">Add New</button>
+                <button class="btn"><i class="fa fa-download"></i> PDF</button>
+                <button class="btn"><i class="fa fa-download"></i> XLSX</button>
+
+            </div>
+        </div>
         <table id="employee" class="table table-bordered table table-hover" cellspacing="0" width="100%">
             <colgroup><col><col><col></colgroup>
             <thead>
