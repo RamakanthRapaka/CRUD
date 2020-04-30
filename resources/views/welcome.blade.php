@@ -45,10 +45,59 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Modal Header</h4>
+                        <h4 class="modal-title">Edit Student</h4>
                     </div>
                     <div class="modal-body">
-                        <p>Some text in the modal.</p>
+                        <form data-toggle="validator" role="form" id="addPersonForm" name="addPersonForm" method="POST">
+
+
+                            <div class="form-group">
+                                <label class="control-label" for="name">Name</label>
+                                <input class="form-control" data-error="Please enter name field." id="name" name="name" placeholder="Name"  type="text" required />
+                                <div class="help-block with-errors"></div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="class" class="control-label">Class</label>
+                                <input type="number" class="form-control" id="class" name="class" placeholder="Class" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="city" class="control-label">City</label>
+                                <div class="form-group">
+                                    <input type="text" data-minlength="4" class="form-control" id="city" name="city" data-error="must enter minimum of 4 characters" placeholder="City" required>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="control-label" for="state">State</label>
+                                <input type="text" data-minlength="4" class="form-control" id="state" name="state" data-error="must enter minimum of 4 characters" placeholder="State" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="state">PinCode</label>
+                                <input type="number" data-minlength="6" class="form-control" id="pincode" name="pincode" data-error="must enter minimum of 6 characters" placeholder="PinCode" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="address">Address</label>
+                                <textarea class="form-control" data-error="Please enter Address field." id="address" name="address" placeholder="Address" required=""></textarea>
+                                <div class="help-block with-errors"></div>
+                            </div>	
+
+                            <div class="form-group">
+                                <button class="btn btn-primary" type="submit">
+                                    Submit
+                                </button>
+                            </div>
+                        </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -113,12 +162,12 @@
                         }
                     });
                 }
-                $(document).on("click", "button", function () {
+                $(document).on("click", "#edit", function () {
+                    $('#myModal').modal('show');
                     var perform = this.id;
                     var row_id = $(this).closest('td').attr('id');
                     console.log(perform);
                     console.log(row_id);
-                    $('#myModal').modal('show');
                 });
             });
         </script>
