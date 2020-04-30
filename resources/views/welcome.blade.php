@@ -22,8 +22,8 @@
             </div>
             <div class="col-sm-3">
                 <button type="button" id="addnew" name="addnew" class="btn btn-primary">Add New</button>
-                <button class="btn"><i class="fa fa-download"></i> PDF</button>
-                <button class="btn"><i class="fa fa-download"></i> XLSX</button>
+                <button class="btn" id="pdf" name="pdf"><i class="fa fa-download"></i> PDF</button>
+                <button class="btn" id="xlsx" name="xlsx"><i class="fa fa-download"></i> XLSX</button>
 
             </div>
         </div>
@@ -204,6 +204,76 @@
                     $('#myModal').modal('show');
                 });
 
+                $(document).on("click", "#pdf", function () {
+
+                    var data = new FormData();
+                    data.append('download', 'pdf');
+
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', 'http://school/api/v1/fetchall', true);
+                    xhr.responseType = 'arraybuffer';
+                    xhr.onload = function () {
+                        if (this.status === 200) {
+                            var filename = "";
+                            var disposition = xhr.getResponseHeader('Content-Disposition');
+                            if (disposition && disposition.indexOf('attachment') !== -1) {
+                                var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                                var matches = filenameRegex.exec(disposition);
+                                if (matches != null && matches[1])
+                                    filename = matches[1].replace(/['"]/g, '');
+                            }
+                            var type = xhr.getResponseHeader('Content-Type');
+                            var blob = new Blob([this.response], {type: type});
+                            if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                                // IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
+                                window.navigator.msSaveBlob(blob, filename);
+                            } else {
+                                var URL = window.URL || window.webkitURL;
+                                var downloadUrl = URL.createObjectURL(blob);
+
+                                if (filename) {
+                                    // use HTML5 a[download] attribute to specify filename
+                                    var a = document.createElement("a");
+                                    // safari doesn't support this yet
+                                    if (typeof a.download === 'undefined') {
+                                        window.location = downloadUrl;
+                                    } else {
+                                        a.href = downloadUrl;
+                                        a.download = filename;
+                                        document.body.appendChild(a);
+                                        a.click();
+                                    }
+                                } else {
+                                    window.location = downloadUrl;
+                                }
+
+                                setTimeout(function () {
+                                    URL.revokeObjectURL(downloadUrl);
+                                }, 100); // cleanup
+                            }
+                            console.log('Hello');
+                        }
+                    };
+                    xhr.send(data);
+                });
+
+                $(document).on("click", "#xlsx", function () {
+                    $.ajax({
+                        url: 'http://school/api/v1/fetchall',
+                        type: 'POST',
+                        data: {download: 'xlsx'},
+                        async: true,
+                        success: function (data) {
+                            const blob = new Blob([data], {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+                            var link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = "myfile.xlsx";
+                            link.click();
+                        }
+                    });
+
+                });
+
                 $(document).on("click", "#delete", function () {
                     var perform = this.id;
                     var row_id = $(this).closest('td').attr('id');
@@ -243,7 +313,8 @@
                         return false;
                     }
                 });
-            });
+            }
+            );
         </script>
 
     </body>
