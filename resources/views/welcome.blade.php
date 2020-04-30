@@ -1,105 +1,98 @@
-<html lang="en">
+<html>
     <head>
-        <title>
-            Student Registration
-        </title>
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"></link>
-        <script src="https://code.jquery.com/jquery-1.12.4.js">
-        </script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js">
-        </script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
+        <style>
+            #pagination a {
+                display:inline-block;
+                margin-right:5px;
+
+            }
+
+
+        </style>
     </head>
     <body>
-        <br/>
-        <div class="container">
-            <div class="panel panel-primary" style="width:750px;margin:0px auto">
+        <table id="employee" class="table table-bordered table table-hover" cellspacing="0" width="100%">
+            <colgroup><col><col><col></colgroup>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Class</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Pin Code</th>
+                    <th>address</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
 
-
-                <div class="panel-heading">Student Registration</div>
-                <div class="panel-body">
-
-
-                    <form data-toggle="validator" role="form" id="addPersonForm" name="addPersonForm" method="POST">
-
-
-                        <div class="form-group">
-                            <label class="control-label" for="name">Name</label>
-                            <input class="form-control" data-error="Please enter name field." id="name" name="name" placeholder="Name"  type="text" required />
-                            <div class="help-block with-errors"></div>
-                        </div>
-
-
-                        <div class="form-group">
-                            <label for="class" class="control-label">Class</label>
-                            <input type="number" class="form-control" id="class" name="class" placeholder="Class" required>
-                            <div class="help-block with-errors"></div>
-                        </div>
-
-
-                        <div class="form-group">
-                            <label for="city" class="control-label">City</label>
-                            <div class="form-group">
-                                <input type="text" data-minlength="4" class="form-control" id="city" name="city" data-error="must enter minimum of 4 characters" placeholder="City" required>
-                                <div class="help-block with-errors"></div>
-                            </div>
-                        </div>
-
-
-                        <div class="form-group">
-                            <label class="control-label" for="state">State</label>
-                            <input type="text" data-minlength="4" class="form-control" id="state" name="state" data-error="must enter minimum of 4 characters" placeholder="State" required>
-                            <div class="help-block with-errors"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="control-label" for="state">PinCode</label>
-                            <input type="number" data-minlength="6" class="form-control" id="pincode" name="pincode" data-error="must enter minimum of 6 characters" placeholder="PinCode" required>
-                            <div class="help-block with-errors"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="control-label" for="address">Address</label>
-                            <textarea class="form-control" data-error="Please enter Address field." id="address" name="address" placeholder="Address" required=""></textarea>
-                            <div class="help-block with-errors"></div>
-                        </div>	
-
-                        <div class="form-group">
-                            <button class="btn btn-primary" type="submit">
-                                Submit
-                            </button>
-                        </div>
-                    </form>
-
-
-                </div>
-            </div>
+                </tr>
+            </thead>
+            <tbody id="emp_body">
+            </tbody>
+        </table>
+        <div id="pager">
+            <ul id="pagination" class="pagination-sm"></ul>
         </div>
+
+
         <script>
-            $(document).ready(function () {
-                $('#addPersonForm').validator().on('submit', function (e) {
-                    if (e.isDefaultPrevented()) {
-                        console.log('Invalid');
-                    } else {
-                        var formData = new FormData($(this)[0]);
-                        $.ajax({
-                            url: 'http://school/api/v1/saveorupdatestudent',
-                            type: 'POST',
-                            data: formData,
-                            async: true,
-                            success: function (data) {
-                                $('#res').html(data);
-                            },
-                            cache: false,
-                            contentType: false,
-                            processData: false
-                        });
-                        $(this)[0].reset();
-                        return false;
+            var $pagination = $('#pagination'),
+                    totalRecords = 0,
+                    records = [],
+                    displayRecords = [],
+                    recPerPage = 2,
+                    page = 1,
+                    totalPages = 0;
+            $.ajax({
+                url: "http://school/api/v1/fetchall",
+                async: true,
+                dataType: 'json',
+                type: 'POST',
+                success: function (data) {
+                    records = data;
+                    console.log(records);
+                    totalRecords = records.count;
+                    totalPages = Math.ceil(totalRecords / recPerPage);
+                    apply_pagination(totalPages);
+                }
+            });
+
+            function generate_table() {
+                var tr;
+                $('#emp_body').html('');
+                for (var i = 0; i < displayRecords.length; i++) {
+                    tr = $('<tr/>');
+                    tr.append("<td>" + displayRecords[i].id + "</td>");
+                    tr.append("<td>" + displayRecords[i].name + "</td>");
+                    tr.append("<td>" + displayRecords[i].class + "</td>");
+                    tr.append("<td>" + displayRecords[i].city + "</td>");
+                    tr.append("<td>" + displayRecords[i].state + "</td>");
+                    tr.append("<td>" + displayRecords[i].pincode + "</td>");
+                    tr.append("<td>" + displayRecords[i].address + "</td>");
+                    tr.append("<td>" + displayRecords[i].created_at + "</td>");
+                    tr.append("<td>" + displayRecords[i].updated_at + "</td>");
+
+                    $('#emp_body').append(tr);
+                }
+            }
+
+            function apply_pagination(totalPages) {
+                $pagination.twbsPagination({
+                    totalPages: totalPages,
+                    visiblePages: 6,
+                    onPageClick: function (event, page) {
+                        displayRecordsIndex = Math.max(page - 1, 0) * recPerPage;
+                        endRec = (displayRecordsIndex) + recPerPage;
+
+                        displayRecords = records.data.slice(displayRecordsIndex, endRec);
+                        generate_table();
                     }
                 });
-            });
-        </script>	
+            }
+        </script>
+
     </body>
 </html>
