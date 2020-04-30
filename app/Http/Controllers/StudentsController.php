@@ -25,7 +25,7 @@ class StudentsController extends ApiController {
             'class' => 'required|required_without:id|numeric',
             'city' => 'required|required_without:id',
             'state' => 'required|required_without:id',
-            'pincode' => 'required|required_without:id|numeric|digits:5',
+            'pincode' => 'required|required_without:id|numeric|digits:6',
             'address' => 'required|required_without:id'
         );
 
