@@ -189,11 +189,11 @@
                 });
 
                 $(document).on("click", "#delete", function () {
-                    return false;
                     var perform = this.id;
                     var row_id = $(this).closest('td').attr('id');
                     console.log(perform);
                     console.log(row_id);
+                    $(this).closest("tr").remove();
                     $.ajax({
                         url: 'http://school/api/v1/delete',
                         type: 'POST',
@@ -201,7 +201,6 @@
                         async: true,
                         success: function (data) {
                             console.log(data);
-                            $(this).closest("tr").remove();
                         }
                     });
                 });
