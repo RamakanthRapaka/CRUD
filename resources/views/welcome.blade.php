@@ -1,99 +1,105 @@
-<!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>Laravel</title>
-
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
-                height: 100vh;
-                margin: 0;
-            }
-
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 13px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
+        <title>
+            Student Registration
+        </title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"></link>
+        <script src="https://code.jquery.com/jquery-1.12.4.js">
+        </script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js">
+        </script>
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
+        <br/>
+        <div class="container">
+            <div class="panel panel-primary" style="width:750px;margin:0px auto">
 
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
 
-            <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
+                <div class="panel-heading">Student Registration</div>
+                <div class="panel-body">
 
-                <div class="links">
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+
+                    <form data-toggle="validator" role="form" id="addPersonForm" name="addPersonForm" method="POST">
+
+
+                        <div class="form-group">
+                            <label class="control-label" for="name">Name</label>
+                            <input class="form-control" data-error="Please enter name field." id="name" name="name" placeholder="Name"  type="text" required />
+                            <div class="help-block with-errors"></div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="class" class="control-label">Class</label>
+                            <input type="number" class="form-control" id="class" name="class" placeholder="Class" required>
+                            <div class="help-block with-errors"></div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="city" class="control-label">City</label>
+                            <div class="form-group">
+                                <input type="text" data-minlength="4" class="form-control" id="city" name="city" data-error="must enter minimum of 4 characters" placeholder="City" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="control-label" for="state">State</label>
+                            <input type="text" data-minlength="4" class="form-control" id="state" name="state" data-error="must enter minimum of 4 characters" placeholder="State" required>
+                            <div class="help-block with-errors"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="state">PinCode</label>
+                            <input type="number" data-minlength="6" class="form-control" id="pincode" name="pincode" data-error="must enter minimum of 6 characters" placeholder="PinCode" required>
+                            <div class="help-block with-errors"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="address">Address</label>
+                            <textarea class="form-control" data-error="Please enter Address field." id="address" name="address" placeholder="Address" required=""></textarea>
+                            <div class="help-block with-errors"></div>
+                        </div>	
+
+                        <div class="form-group">
+                            <button class="btn btn-primary" type="submit">
+                                Submit
+                            </button>
+                        </div>
+                    </form>
+
+
                 </div>
             </div>
         </div>
+        <script>
+            $(document).ready(function () {
+                $('#addPersonForm').validator().on('submit', function (e) {
+                    if (e.isDefaultPrevented()) {
+                        console.log('Invalid');
+                    } else {
+                        var formData = new FormData($(this)[0]);
+                        $.ajax({
+                            url: 'http://school/api/v1/saveorupdatestudent',
+                            type: 'POST',
+                            data: formData,
+                            async: true,
+                            success: function (data) {
+                                $('#res').html(data);
+                            },
+                            cache: false,
+                            contentType: false,
+                            processData: false
+                        });
+                        $(this)[0].reset();
+                        return false;
+                    }
+                });
+            });
+        </script>	
     </body>
 </html>
