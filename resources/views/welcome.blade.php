@@ -4,6 +4,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js"></script>
         <style>
             #pagination a {
                 display:inline-block;
@@ -168,6 +169,28 @@
                     var row_id = $(this).closest('td').attr('id');
                     console.log(perform);
                     console.log(row_id);
+                });
+
+                $('#addPersonForm').validator().on('submit', function (e) {
+                    if (e.isDefaultPrevented()) {
+                        console.log('Invalid');
+                    } else {
+                        var formData = new FormData($(this)[0]);
+                        $.ajax({
+                            url: 'http://school/api/v1/saveorupdatestudent',
+                            type: 'POST',
+                            data: formData,
+                            async: true,
+                            success: function (data) {
+                                $('#res').html(data);
+                            },
+                            cache: false,
+                            contentType: false,
+                            processData: false
+                        });
+                        $(this)[0].reset();
+                        return false;
+                    }
                 });
             });
         </script>
