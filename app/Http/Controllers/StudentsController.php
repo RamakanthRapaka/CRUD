@@ -212,6 +212,9 @@ class StudentsController extends ApiController {
                         'status' => 'success',
                         'status_code' => Res::HTTP_OK,
                         'data' => $studentss,
+                        'count' => $count,
+                        'pages' => ceil($count / $request->input('records_per_page')),
+                        'current_page' => $request->input('page_number'),
                         'message' => 'Students Record Found!'
             ]);
         } catch (QueryException $e) {
