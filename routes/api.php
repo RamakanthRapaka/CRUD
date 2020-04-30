@@ -16,7 +16,9 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::post('/saveorupdatestudent', 'StudentsController@SaveOrUpdate');
-Route::post('/findbyid', 'StudentsController@FindById');
-Route::post('/delete', 'StudentsController@DeleteById');
-Route::post('/fetchall', 'StudentsController@FetchAll');
+Route::group(['middleware' => 'cors', 'prefix' => '/v1'], function () {
+    Route::post('/saveorupdatestudent', 'StudentsController@SaveOrUpdate');
+    Route::post('/findbyid', 'StudentsController@FindById');
+    Route::post('/delete', 'StudentsController@DeleteById');
+    Route::post('/fetchall', 'StudentsController@FetchAll');
+});
