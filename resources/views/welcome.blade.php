@@ -17,8 +17,8 @@
     </head>
     <body>
         <div class="row">
-            <div class="col-sm-9">
-
+            <div class="col-sm-7">
+                <input class="form-control" id="search" name="search" placeholder="Search"  type="text"/>
             </div>
             <div class="col-sm-3">
                 <button type="button" id="addnew" name="addnew" class="btn btn-primary">Add New</button>
@@ -131,12 +131,21 @@
                         page = 1,
                         totalPages = 0;
 
+                $("#search").keyup(function () {
+                    if ($("#search").length > 2) {
+                        $('#emp_body').html('Searching....');
+                    } else {
+                        Pagination();
+                    }
+                });
+
                 function Pagination() {
                     $.ajax({
                         url: "http://school/api/v1/fetchall",
                         async: true,
                         dataType: 'json',
                         type: 'POST',
+                        data: {name: $('input[name="search"]').val()},
                         success: function (data) {
                             records = data;
                             console.log(records);
