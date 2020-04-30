@@ -20,7 +20,7 @@ class StudentsController extends ApiController {
     public function SaveOrUpdate(Request $request) {
 
         $rules = array(
-            'id' => 'required_without_all:name,class,city,state,pincode,address|numeric',
+            'id' => 'required_without_all:name,class,city,state,pincode,address',
             'name' => 'required|required_without:id',
             'class' => 'required|required_without:id|numeric',
             'city' => 'required|required_without:id',

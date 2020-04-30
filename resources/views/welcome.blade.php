@@ -21,7 +21,7 @@
 
             </div>
             <div class="col-sm-3">
-                <button type="button" class="btn btn-primary">Add New</button>
+                <button type="button" id="addnew" name="addnew" class="btn btn-primary">Add New</button>
                 <button class="btn"><i class="fa fa-download"></i> PDF</button>
                 <button class="btn"><i class="fa fa-download"></i> XLSX</button>
 
@@ -198,6 +198,10 @@
                             $("textarea#address").val(data.data.address);
                         }
                     });
+                });
+
+                $(document).on("click", "#addnew", function () {
+                    $('#myModal').modal('show');
                 });
 
                 $(document).on("click", "#delete", function () {
