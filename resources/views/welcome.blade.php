@@ -130,19 +130,23 @@
                         recPerPage = 2,
                         page = 1,
                         totalPages = 0;
-                $.ajax({
-                    url: "http://school/api/v1/fetchall",
-                    async: true,
-                    dataType: 'json',
-                    type: 'POST',
-                    success: function (data) {
-                        records = data;
-                        console.log(records);
-                        totalRecords = records.count;
-                        totalPages = Math.ceil(totalRecords / recPerPage);
-                        apply_pagination(totalPages);
-                    }
-                });
+
+                function Pagination() {
+                    $.ajax({
+                        url: "http://school/api/v1/fetchall",
+                        async: true,
+                        dataType: 'json',
+                        type: 'POST',
+                        success: function (data) {
+                            records = data;
+                            console.log(records);
+                            totalRecords = records.count;
+                            totalPages = Math.ceil(totalRecords / recPerPage);
+                            apply_pagination(totalPages);
+                        }
+                    });
+                }
+                Pagination();
 
                 function generate_table() {
                     var tr;
@@ -320,6 +324,7 @@
                         async: true,
                         success: function (data) {
                             console.log(data);
+                            Pagination();
                         }
                     });
                 });
@@ -343,6 +348,7 @@
                         });
                         $(this)[0].reset();
                         $('#myModal').modal('hide');
+                        Pagination();
                         return false;
                     }
                 });
