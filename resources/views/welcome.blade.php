@@ -54,6 +54,7 @@
 
                             <div class="form-group">
                                 <label class="control-label" for="name">Name</label>
+                                <input type="hidden" id="id" name="id" value=""/>
                                 <input class="form-control" data-error="Please enter name field." id="name" name="name" placeholder="Name"  type="text" required />
                                 <div class="help-block with-errors"></div>
                             </div>
@@ -169,6 +170,22 @@
                     var row_id = $(this).closest('td').attr('id');
                     console.log(perform);
                     console.log(row_id);
+                    $.ajax({
+                        url: 'http://school/api/v1/findbyid',
+                        type: 'POST',
+                        data: {id: row_id},
+                        async: true,
+                        success: function (data) {
+                            console.log(data);
+                            $('input[name="id"]').val(data.data.id);
+                            $('input[name="name"]').val(data.data.name);
+                            $('input[name="class"]').val(data.data.class);
+                            $('input[name="city"]').val(data.data.city);
+                            $('input[name="state"]').val(data.data.state);
+                            $('input[name="pincode"]').val(data.data.pincode);
+                            $("textarea#address").val(data.data.address);
+                        }
+                    });
                 });
 
                 $('#addPersonForm').validator().on('submit', function (e) {
@@ -189,6 +206,7 @@
                             processData: false
                         });
                         $(this)[0].reset();
+                        $('#myModal').modal('hide');
                         return false;
                     }
                 });
