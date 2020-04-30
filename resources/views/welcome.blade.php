@@ -27,7 +27,7 @@
                     <th>address</th>
                     <th>Created At</th>
                     <th>Updated At</th>
-
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody id="emp_body">
@@ -74,7 +74,7 @@
                     tr.append("<td>" + displayRecords[i].address + "</td>");
                     tr.append("<td>" + displayRecords[i].created_at + "</td>");
                     tr.append("<td>" + displayRecords[i].updated_at + "</td>");
-
+                    tr.append("<td id=" + displayRecords[i].id + "><button type='button' id='edit' name='edit' class='btn btn-primary'>Edit</button> <button type='button' id='delete' name='delete' class='btn btn-danger'>Delete</button></td>");
                     $('#emp_body').append(tr);
                 }
             }
