@@ -156,7 +156,7 @@ class StudentsController extends ApiController {
                         return $query->where('id', $request->input('id'));
                     })
                     ->when($request->input('name') != NULL, function($query) use ($request) {
-                        return $query->where('name', $request->input('name'));
+                        return $query->where('name', 'like', '%' . $request->input('name') . '%');
                     })
                     ->when($request->input('class') != NULL, function($query) use ($request) {
                         return $query->where('class', $request->input('class'));
